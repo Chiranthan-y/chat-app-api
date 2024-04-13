@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule } from '@nestjs/config';
 
 import { AppService } from './app.service';
 import { MessagesService } from './services/messages/messages.service';
@@ -15,13 +14,9 @@ import { MessagesModule } from './modules/messages.module';
 import { UsersModule } from './modules/users.module';
 
 import { ConversationsModule } from './modules/conversations.module';
-
 @Module({
   imports: [
-    MongooseModule.forRoot(''),
-    ConfigModule.forRoot({
-      envFilePath: '.development.env',
-    }),
+    MongooseModule.forRoot('mongodb://localhost:27017/chatDB'),
     UsersModule,
     AuthModule,
     MessagesModule,
