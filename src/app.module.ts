@@ -14,9 +14,11 @@ import { MessagesModule } from './modules/messages.module';
 import { UsersModule } from './modules/users.module';
 
 import { ConversationsModule } from './modules/conversations.module';
+import { UserSchema } from './schemas/users.schema';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/chatDB'),
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     UsersModule,
     AuthModule,
     MessagesModule,

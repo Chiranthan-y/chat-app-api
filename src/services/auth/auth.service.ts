@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateUserDto } from 'src/dto/user/create-user.dto';
-import { IUser } from 'src/interface/users.interface';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel('User') private userModel: Model<IUser>) {}
+  constructor() {}
+
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt(10); // Customize salt rounds
+    return bcrypt.hash(password, salt);
+  }
+
+  async comparePassword(password: string, hash: string): Promise<boolean> {
+    return bcrypt.compare(password, hash);
+  }
 
   async loginUser() {}
-
-  async registerUser(createUserDto: CreateUserDto): Promise<IUser> {
-    const newUser = await new this.userModel(createUserDto);
-    return newUser.save();
-  }
 }
