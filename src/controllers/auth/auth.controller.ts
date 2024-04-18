@@ -1,5 +1,6 @@
 import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { CreateUserDto } from 'src/dto/user/create-user.dto';
+import { LoginUserDto } from 'src/dto/user/login-user.dto';
 import { AuthService } from 'src/services/auth/auth.service';
 import { UsersService } from 'src/services/users/users.service';
 
@@ -21,6 +22,7 @@ export class AuthController {
       return response.status(HttpStatus.OK).json({
         message: 'User Created Successfully',
         status: HttpStatus.OK,
+        error: null,
         user: {
           username: user.username,
           email: user.email,
@@ -51,8 +53,40 @@ export class AuthController {
   }
 
   @Post('login')
-  async loginUser() {
+  async loginUser(@Res() response, @Body() loginUserDto: LoginUserDto) {
     try {
-    } catch {}
+      const user = await this.userService.getUserByUserName(loginUserDto);
+      if (
+        await this.authService.comparePassword(
+          loginUserDto.password,
+          user.password,
+        )
+      ) {
+        const token = await this.authService.generateToken(
+          user.id,
+          user.username,
+        );
+        return response.status(HttpStatus.OK).json({
+          message: 'User logged in successfully',
+          status: HttpStatus.OK,
+          user: {
+            username: user.username,
+            email: user.email,
+            id: user.id,
+          },
+          token,
+          error: null,
+        });
+      } else {
+        return response.status(HttpStatus.UNAUTHORIZED).json({
+          message: 'Wrong Password',
+          error: 'Please check you username and password',
+        });
+      }
+    } catch (error) {
+      return response.status(HttpStatus.NOT_FOUND).json({
+        error: 'Username not found',
+      });
+    }
   }
 }
