@@ -1,6 +1,8 @@
 import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { CreateUserDto } from 'src/dto/user/create-user.dto';
 import { LoginUserDto } from 'src/dto/user/login-user.dto';
+import { DefaultResponse } from 'src/interface/response.interface';
+import { IUser } from 'src/interface/users.interface';
 import { AuthService } from 'src/services/auth/auth.service';
 import { UsersService } from 'src/services/users/users.service';
 
@@ -12,7 +14,10 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  async registerUser(@Res() response, @Body() createUserDto: CreateUserDto) {
+  async registerUser(
+    @Res() response,
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<DefaultResponse<IUser>> {
     try {
       createUserDto.password = await this.authService.hashPassword(
         createUserDto.password,
@@ -53,7 +58,10 @@ export class AuthController {
   }
 
   @Post('login')
-  async loginUser(@Res() response, @Body() loginUserDto: LoginUserDto) {
+  async loginUser(
+    @Res() response,
+    @Body() loginUserDto: LoginUserDto,
+  ): Promise<DefaultResponse<IUser>> {
     try {
       const user = await this.userService.getUserByUserName(loginUserDto);
       if (
