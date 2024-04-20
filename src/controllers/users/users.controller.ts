@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   HttpStatus,
-  Param,
   Put,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -16,17 +16,17 @@ import { AuthGuard } from 'src/services/auth/auth.guard';
 import { UsersService } from 'src/services/users/users.service';
 
 @Controller('users')
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  @Get(':userId')
-  @UseGuards(AuthGuard)
+  @Get('getuser')
   async getUserById(
+    @Req() request,
     @Res() response,
-    @Param() param,
   ): Promise<DefaultResponse<IUser>> {
     try {
-      const user = await this.userService.getUserById(param.userId);
+      const user = await this.userService.getUserById(request.user.id);
       if (user) {
         return response.status(HttpStatus.OK).json({
           message: 'User Got Successfully',
@@ -46,16 +46,15 @@ export class UsersController {
     }
   }
 
-  @Put(':userId')
-  @UseGuards(AuthGuard)
+  @Put('updateuser')
   async updateUserById(
     @Res() response,
-    @Param() param,
+    @Req() request,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<DefaultResponse<IUser>> {
     try {
       const updatedUser = await this.userService.updateuserById(
-        param?.userId,
+        request.user.id,
         updateUserDto,
       );
       if (updatedUser) {
@@ -77,14 +76,15 @@ export class UsersController {
     }
   }
 
-  @Delete(':userId')
-  @UseGuards(AuthGuard)
+  @Delete('deleteuser')
   async deleteUserById(
     @Res() response,
-    @Param() param,
+    @Req() request,
   ): Promise<DefaultResponse<IUser>> {
     try {
-      const deletedUser = await this.userService.deleteUserById(param.userId);
+      const deletedUser = await this.userService.deleteUserById(
+        request.user.id,
+      );
       if (deletedUser) {
         return response.status(HttpStatus.OK).json({
           message: 'User Got Successfully',
