@@ -97,6 +97,10 @@ export class UsersController {
           },
         });
       }
-    } catch {}
+    } catch (error) {
+      return response.status(HttpStatus.NOT_FOUND).json({
+        error: 'User not found',
+      });
+    }
   }
 }

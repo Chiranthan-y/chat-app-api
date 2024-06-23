@@ -1,4 +1,4 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { User } from './users.schema';
 import { Types } from 'mongoose';
 import { Message } from './message.schema';
@@ -30,3 +30,5 @@ export class Conversation {
 function arrayMinLength(min: number) {
   return (v) => v.length >= min;
 }
+
+export const ConversationSchema = SchemaFactory.createForClass(Conversation);

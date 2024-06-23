@@ -26,6 +26,7 @@ export class AuthMiddleware implements NestMiddleware {
         secret: 'hello',
       });
       const user = await this.userService.getUserById(decode.id);
+      console.log({ user });
       if (!user) {
         throw new UnauthorizedException('user not found Token');
       }
