@@ -12,7 +12,7 @@ import {
 import { UpdateUserDto } from 'src/dto/user/update-user.dto';
 import { DefaultResponse } from 'src/interface/response.interface';
 import { IUser } from 'src/interface/users.interface';
-import { AuthGuard } from 'src/services/auth/auth.guard';
+import { AuthGuard } from 'src/guard/auth.guard';
 import { UsersService } from 'src/services/users/users.service';
 
 @Controller('users')

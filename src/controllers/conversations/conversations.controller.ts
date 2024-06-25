@@ -15,7 +15,7 @@ import { CreateConversationDto } from 'src/dto/conversation/create-conversation.
 import { UpdateConversationDto } from 'src/dto/conversation/update-conversation.dto';
 import { IConversation } from 'src/interface/conversation.interface';
 import { DefaultResponse } from 'src/interface/response.interface';
-import { AuthGuard } from 'src/services/auth/auth.guard';
+import { AuthGuard } from 'src/guard/auth.guard';
 import { ConversationsService } from 'src/services/conversations/conversations.service';
 
 @Controller('conversations')

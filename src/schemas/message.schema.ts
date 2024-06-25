@@ -1,4 +1,4 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { User } from './users.schema';
 import { Types } from 'mongoose';
 import { Conversation } from './conversation.schema';
@@ -24,3 +24,5 @@ export class Message {
   @Prop({ default: false })
   is_read: boolean;
 }
+
+export const MessageSchema = SchemaFactory.createForClass(Message);
